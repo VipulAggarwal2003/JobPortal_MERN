@@ -11,8 +11,8 @@ import CompanyCreate from "./components/admin/CompanyCreate";
 import CompanySetup from "./components/admin/CompanySetup";
 import PostJob from "./components/admin/PostJob";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
-import Login from "./components/auth/login";
-import Signup from "./components/auth/signup";
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {
