@@ -1,0 +1,5 @@
+{
+    "git.enabled": true,
+    "css.lint.unknownAtRules": "ignore",
+    "files.autoSave": "afterDelay"
+}
