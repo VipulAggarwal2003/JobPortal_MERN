@@ -17,7 +17,7 @@ app.use(cookieParser());
 const corsOptions = {
   origin: [
     "https://job-portal-using-mern.onrender.com/",
-    `${process.env.BASE_URL}`
+    `${process.env.BASE_URL}`,
   ],
   credentials: true,
 };
