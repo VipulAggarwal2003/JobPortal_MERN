@@ -50,7 +50,7 @@ const JobDescription = () => {
             }
         }
         fetchSingleJob();
-    },[jobId,dispatch,user?._id]);
+    },[jobId,dispatch]);
 
 
     return (
