@@ -14,27 +14,38 @@ export const register = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-    const file = req.file;
-    const fileUri = getDataUri(file);
-
-    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
     if (user) {
       return res.status(400).json({
         message: "User already exists with this email",
         success: false,
       });
     }
+    const file = req.file;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({
-      fullname,
-      email,
-      phoneNumber,
-      password: hashedPassword,
-      role,
-      profile: {
-        profilePhoto: cloudResponse.secure_url,
-      },
-    });
+
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      await User.create({
+        fullname,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        role,
+        profile: {
+          profilePhoto: cloudResponse.secure_url,
+        },
+      });
+    } else {
+      await User.create({
+        fullname,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        role,
+      });
+    }
+
     return res.status(201).json({
       message: "Account created successfully",
       success: true,
@@ -121,41 +132,43 @@ export const logout = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, bio, skills} = req.body;
-    const file = req.files['file'];
-    const photo = req.files['profilePhoto']; 
+    const { fullname, email, phoneNumber, bio, skills } = req.body;
+    const file = req.files["file"];
+    const photo = req.files["profilePhoto"];
     console.log(photo);
     const userId = req.id; // middleware authentication
     let user = await User.findById(userId);
-    if(file){
+    if (file) {
       const fileUri = getDataUri(file);
-      const cloudResponseFile = await cloudinary.uploader.upload(fileUri.content, {
-        resource_type: "raw",
-        format: "pdf",
-      });
+      const cloudResponseFile = await cloudinary.uploader.upload(
+        fileUri.content,
+        {
+          resource_type: "raw",
+          format: "pdf",
+        }
+      );
       if (cloudResponseFile) {
         user.profile.resume = cloudResponseFile.secure_url; // save the cloudinary url
         user.profile.resumeOriginalName = file[0].originalname; // save the original file name
       }
     }
 
-    if(photo){
+    if (photo) {
       const photoUri = getDataUri(photo);
-      const cloudResponsePhoto = await cloudinary.uploader.upload(photoUri.content);
-      
+      const cloudResponsePhoto = await cloudinary.uploader.upload(
+        photoUri.content
+      );
+
       if (cloudResponsePhoto) {
-      user.profile.profilePhoto = cloudResponsePhoto.secure_url; // save the cloudinary url
+        user.profile.profilePhoto = cloudResponsePhoto.secure_url; // save the cloudinary url
+      }
     }
-    }
-    
-  
+
     let skillsArray;
     if (skills) {
       skillsArray = skills.split(",");
     }
 
-    
-    
     if (!user) {
       return res.status(401).json({
         message: "User not found",
@@ -170,7 +183,6 @@ export const updateProfile = async (req, res) => {
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skillsArray;
 
-
     await user.save();
 
     user = {
@@ -181,8 +193,7 @@ export const updateProfile = async (req, res) => {
       role: user.role,
       profile: user.profile,
     };
-    
-    
+
     return res.status(200).json({
       message: "Profile Updated Successfully",
       user,
