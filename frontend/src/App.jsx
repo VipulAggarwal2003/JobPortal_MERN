@@ -1,4 +1,5 @@
 import AppliedJobTable from "./components/AppliedJobTable";
+import BookmarkedJobs from "./components/BookmarkedJobs";
 import Browse from "./components/Browse";
 import Home from "./components/Home";
 import JobDescription from "./components/JobDescription";
@@ -32,6 +33,10 @@ function App() {
     {
       path:'/jobs',
       element:<Jobs/>
+    },
+    {
+      path:'/jobs/bookmarked',
+      element:<BookmarkedJobs/>
     },
     {
       path:'/description/:id',

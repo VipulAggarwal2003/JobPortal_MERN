@@ -116,3 +116,81 @@ export const getAdminJobs = async(req,res) =>{
         console.log(error);
     }
 }
+
+export const getJobsByUserId = async (req,res)=>{
+    const userId = req.params.id;
+    if(userId){
+        try {
+            const savedJobs = await Job.find({ saved_by: { $in: [userId] } })
+            .populate({
+                path:'company'
+            })
+            .sort({ title: 1 });
+            
+           return res.status(201).json({
+              savedJobs,
+              success:true
+            });
+          } catch (error) {
+            console.log(error);
+            
+            return res.status(401).json({ 
+              message:"Failed to fetch saved jobs",
+              success:false
+            });
+          }
+    }
+    else{
+        return res.status(401).json({ 
+            message:"User not Authenticated",
+            success:false
+          });
+    }
+}
+
+export const saveJobForUser = async (req,res) =>{
+   try {
+    const {userId,jobId} = req.body;
+    const job = await Job.findById(jobId);
+    job.saved_by.push(userId);
+    await job.save();
+
+   return res.status(201).json({ message: "Job saved",success:true });
+
+   } 
+   catch (error) {
+     console.log(error);
+     return res.status(401).json({
+        message:"Job not saved",
+        success:false
+     })
+   }
+}
+
+export const unSaveJob = async (req,res)=>{
+    try {
+        const { userId, jobId } = req.body;
+        
+        // Find the job and remove the userId from the saved_by array
+        const job = await Job.findByIdAndUpdate(
+          jobId,
+          { $pull: { saved_by: userId } },  // Remove userId from the saved_by array
+          { new: true }  // Return the updated document
+        );
+    
+        if (!job) {
+          return res.status(404).json({ message: "Job not found", success: false });
+        }
+    
+        res.status(200).json({
+          message: "Job unsaved",
+          success: true,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          message: "Failed to unsave the job",
+          success: false
+        });
+      }
+}

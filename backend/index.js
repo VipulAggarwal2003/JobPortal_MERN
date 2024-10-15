@@ -15,11 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const corsOptions = {
-  origin: [
-    "https://job-portal-using-mern.onrender.com",
-    `${process.env.BASE_URL}`,
-  ],
-  credentials: true,
+  // origin: [`${process.env.BASE_URL}`],
+  origin:"*"
 };
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3000;

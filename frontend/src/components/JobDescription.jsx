@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner';
+import Navbar from './shared/Navbar';
 
 const JobDescription = () => {
     const {user} = useSelector(store => store.auth);
@@ -21,7 +22,15 @@ const JobDescription = () => {
     
     const applyJobHandler = async() =>{
         try {
-            const res = await axios(`${APPLICATION_API_END_POINT}/apply/${jobId}`,{withCredentials:true});
+            const token = localStorage.getItem('authToken');
+            
+            const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`,{}, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `bearer ${token}`
+                }
+            });
+
             if(res.data.success){
                 setIsApplied(true);
                 const updatedSingleJob = {...singleJob,applications:[...singleJob.applications,{applicant:user?._id}]};
@@ -30,16 +39,15 @@ const JobDescription = () => {
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || "User must be logged in" );
         }
     }
 
 
     useEffect(() =>{
-        if(!jobId) return;
         const fetchSingleJob = async() =>{
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`,{withCredentials:true});
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`);
                 if(res.data.success){
                     
                    dispatch(setSingleJob(res.data.job));
@@ -54,6 +62,9 @@ const JobDescription = () => {
 
 
     return (
+        <div>
+
+        <Navbar/>
         <div className="max-w-7xl mx-auto my-10">
 
             <div className="flex items-center justify-between">
@@ -66,10 +77,19 @@ const JobDescription = () => {
                     </div>
                 </div>
                 <Button
-                   onClick = {isApplied ? null : applyJobHandler}
-                    disabled={isApplied}
-                    className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad]'}`}>
-                    {isApplied ? 'Already Applied' : 'Apply Now'}
+                   onClick = {() => {
+                    if (isApplied) {
+                        toast.error("You already applied to this job!");
+                    }
+                    else if(!user){
+                        toast.error("User Not Authenticated!");
+                    }
+                    else {
+                        applyJobHandler();
+                    }
+                }}
+                    className={`rounded-lg ${isApplied ? 'bg-slate-500 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#531eb1]'}`}>
+                    {isApplied ? ('Already Applied') : ('Apply Now')}
                 </Button>
             </div>
             <h1 className='border-b-2 border-b-gray-300 font-medium py-4'>Job Description</h1>
@@ -83,6 +103,7 @@ const JobDescription = () => {
                 <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.applications?.length}</span></h1>
                 <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJob?.createdAt.split("T")[0]}</span></h1>
             </div>
+        </div>
         </div>
     )
 }

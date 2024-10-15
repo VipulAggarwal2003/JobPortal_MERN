@@ -19,14 +19,18 @@ const ApplicantsTable = () => {
         // Close the popover when status button is clicked
         setIsPopOverOpen(null);
         try {
-            axios.defaults.withCredentials = true;
-            const res = await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status });
-            console.log(res);
+            const token = localStorage.getItem('authToken');
+            const res = await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${token}`
+                }
+            });
             if (res.data.success) {
                 toast.success(res.data.message);
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
         }
     }
 
@@ -53,16 +57,16 @@ const ApplicantsTable = () => {
                                 <TableCell>{item?.applicant?.phoneNumber}</TableCell>
                                 <TableCell>
                                     {
-                                        item.applicant?.profile?.resume ? 
-                                        <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> 
-                                        : <span>NA</span>
+                                        item?.applicant?.profile?.resume ?
+                                            <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a>
+                                            : <span>NA</span>
                                     }
                                 </TableCell>
-                                <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                                <TableCell>{item?.applicant?.createdAt.split("T")[0]}</TableCell>
                                 <TableCell className="float-right cursor-pointer">
-                                    <Popover 
-                                        open={isPopOverOpen === item._id}  // Open only for the current row
-                                        onOpenChange={() => setIsPopOverOpen(isPopOverOpen === item._id ? null : item._id)}  // Toggle popover state
+                                    <Popover
+                                        open={isPopOverOpen === item?._id}  // Open only for the current row
+                                        onOpenChange={() => setIsPopOverOpen(isPopOverOpen === item?._id ? null : item?._id)}  // Toggle popover state
                                     >
                                         <PopoverTrigger>
                                             <MoreHorizontal />
@@ -70,15 +74,15 @@ const ApplicantsTable = () => {
                                         <PopoverContent className="w-32 bg-white">
                                             {
                                                 shortlistingStatus.map((status, index) => (
-                                                    <button 
-                                                        onClick={() => statusHandler(status, item?._id)} 
-                                                        key={index} 
+                                                    <button
+                                                        onClick={() => statusHandler(status, item?._id)}
+                                                        key={index}
                                                         className='flex w-fit items-center my-2 cursor-pointer bg-white'>
                                                         <span className={`${status === "Rejected" ? 'border rounded border-gray-500 bg-red-400 ' : 'border rounded border-gray-500 bg-green-400'}`}>
                                                             {status == "Accepted" ? (
                                                                 <div className='w-20'>ACCEPT</div>
                                                             ) : (<div className='w-20'>REJECT</div>)}
-                                                            
+
                                                         </span>
                                                     </button>
                                                 ))

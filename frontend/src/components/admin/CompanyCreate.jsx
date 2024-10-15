@@ -16,11 +16,12 @@ const CompanyCreate = () => {
     const dispatch = useDispatch();
     const registerNewCompany = async () => {
         try {
+            const token = localStorage.getItem('authToken'); 
             const res = await axios.post(`${COMPANY_API_END_POINT}/register`, { companyName }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${token}`
                 },
-                withCredentials: true
             });
             if (res?.data?.success) {
                 dispatch(setSingleCompany(res.data.company));
@@ -29,7 +30,7 @@ const CompanyCreate = () => {
                 navigate(`/admin/company/${companyId}`);
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
             console.log(error);
         }
     }

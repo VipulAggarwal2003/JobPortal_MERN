@@ -7,11 +7,9 @@ import { Badge } from './ui/badge'
 import { Label } from './ui/label'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
-import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
-import { color } from 'framer-motion'
 
 const Profile = () => {
-    useGetAppliedJobs();
+    
     const { user } = useSelector(store => store.auth);
     const isResume = true;
     const [open, setOpen] = useState(false);
@@ -24,7 +22,7 @@ const Profile = () => {
                 <div className='flex justify-between'>
                     <div className='flex items-center gap-4'>
                         <Avatar className="h-24 w-24">
-                            <AvatarImage src={user.profile.profilePhoto != "" ? (user.profile.profilePhoto) : ("https://static.vecteezy.com/system/resources/previews/036/280/650/original/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg")} alt="profile" />
+                            <AvatarImage src={user?.profile?.profilePhoto != "" ? (user.profile.profilePhoto) : ("https://static.vecteezy.com/system/resources/previews/036/280/650/original/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg")} alt="profile" />
                         </Avatar>
                         <div>
                             <h1 className='font-medium text-xl'>{user?.fullname}</h1>
@@ -72,10 +70,6 @@ const Profile = () => {
                             <span>NA</span>
                     }
                 </div>
-            </div>
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
-                <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
-                
             </div>
             <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>

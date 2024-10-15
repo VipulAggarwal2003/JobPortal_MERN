@@ -15,11 +15,11 @@ const CompanySetup = () => {
     const params = useParams();
     useGetCompanyById(params.id);
     const [input, setInput] = useState({
-        name: "",
+        companyName: "",
         description: "",
         location: "",
         website: "",
-        file: null
+        file: ""
     });
     
     const {singleCompany} = useSelector(store=>store.company);
@@ -31,27 +31,38 @@ const CompanySetup = () => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
     const changeFileHandler = (e) => {
-        const file = e.target?.files?.[0];
-        setInput({ ...input, file });
+        const logo = e.target.files?.[0];
+        setInput(({ ...input, file: logo }));
     }
     const submitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append("name", input.name);
+        formData.append("companyName", input.companyName);
         formData.append("description", input.description);
         formData.append("location", input.location);
         formData.append("website", input.website);
+
+        if (input.file && (input.file.type !== 'image/jpg' && input.file.type !== 'image/png' && input.file.type !== 'image/jpeg')) {
+            toast.error("company logo must be an image!");
+            return;
+          }
+             if(input.file?.size > 2*1024*1024){
+            toast.error("logo size must be less than 2MB!");
+            return;
+          }
         if (input.file) {
             formData.append("file", input.file);
         }
 
         try {
             setLoading(true);
+            const token = localStorage.getItem('authToken');
             const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `bearer ${token}`
                 },
-                withCredentials: true
+                
             });
             if (res.data.success) {
                 toast.success(res.data.message);
@@ -59,7 +70,7 @@ const CompanySetup = () => {
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || "Updating info Failed!");
         }
         finally {
             setLoading(false);
@@ -68,12 +79,12 @@ const CompanySetup = () => {
 
     useEffect(()=>{
         setInput({
-            name:singleCompany.companyName || "",
+            companyName:singleCompany.companyName || "",
             description:singleCompany.description || "",
             website:singleCompany.website || "",
-            location : singleCompany.location || "",
-            file: singleCompany.file || null
+            location : singleCompany.location || ""
         })
+        
     },[singleCompany]);
 
     return (
@@ -93,8 +104,8 @@ const CompanySetup = () => {
                             <Label>Company Name</Label>
                             <Input
                                 type="text"
-                                name="name"
-                                value={input.name}
+                                name="companyName"
+                                value={input.companyName}
                                 onChange={changeEventHandler}
                             />
                         </div>
@@ -136,6 +147,8 @@ const CompanySetup = () => {
                                 accept="image/*"
                                 onChange={changeFileHandler}
                             />
+                             <br/>
+                             <pre className='text-red-500 block mb-2'>* max image size is 2MB (jpg/png/jpeg)</pre>
                         </div>
 
                     </div>

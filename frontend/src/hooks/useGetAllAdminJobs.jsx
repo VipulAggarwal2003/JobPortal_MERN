@@ -9,7 +9,12 @@ const useGetAllAdminJobs = () => {
     useEffect(() =>{
         const fetchAllAdminJobs = async() =>{
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/getadminjobs`,{withCredentials:true});
+                const token = localStorage.getItem('authToken');
+                const res = await axios.get(`${JOB_API_END_POINT}/getadminjobs`,{
+                    headers:{
+                        Authorization: `bearer ${token}`
+                    }
+                });
                 if(res.data.success){
                    dispatch(setAllAdminJobs(res.data.jobs));
                 }

@@ -9,7 +9,12 @@ const useGetAllCompanies = () => {
     useEffect(() =>{
         const fetchAllCompanies = async() =>{
             try {
-                const res = await axios.get(`${COMPANY_API_END_POINT}/get`,{withCredentials:true});
+                const token = localStorage.getItem('authToken');
+                const res = await axios.get(`${COMPANY_API_END_POINT}/get`,{
+                    headers:{
+                        Authorization: `bearer ${token}`
+                    }
+                });
                 if(res.data.success){
                    dispatch(setCompanies(res.data.companies));
                 }

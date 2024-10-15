@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSearchedQuery } from '@/redux/jobSlice';
-
+import "../../images/job_portal_home_page.png" 
 const HeroSection = () => {
   
   const [query,setQuery] = useState("");
@@ -16,6 +16,10 @@ const HeroSection = () => {
   }
 
   return (
+    <div >
+      <div className="flex flex-col absolute z-[-10] opacity-50 w-500 h-500">
+      <img  src='../../images/job_portal_home_page.png'/>
+      </div>
     <div className='text-center'>
       <div className='flex flex-col gap-5 my-10'>
       <span className=' mx-auto px-4 py-2 rounded-full bg-gray-100 text-[#F83002] font font-medium'> No. 1 Job Hunting Website</span>
@@ -24,7 +28,7 @@ const HeroSection = () => {
       <div className='flex w-[40%] shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto'>
         <input
          type="text" 
-         placeholder='Find your dream jobs'
+         placeholder='Search your dream jobs here'
          onChange={(e) =>setQuery(e.target.value)}
          className='outline-none border-none w-full'
         />
@@ -34,7 +38,9 @@ const HeroSection = () => {
       </div>
       </div>
     </div>
+    </div>
   )
+  
 }
 
 export default HeroSection

@@ -11,8 +11,6 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 
-const companyArray = [];
-
 const PostJob = () => {
     const [input, setInput] = useState({
         title: "",
@@ -42,18 +40,19 @@ const PostJob = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            const token = localStorage.getItem('authToken');
             const res = await axios.post(`${JOB_API_END_POINT}/post`, input,{
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': `bearer ${token}`
                 },
-                withCredentials:true
             });
             if(res.data.success){
                 toast.success(res.data.message);
                 navigate("/admin/jobs");
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
         } finally{
             setLoading(false);
         }
@@ -96,7 +95,7 @@ const PostJob = () => {
                             />
                         </div>
                         <div>
-                            <Label>Salary</Label>
+                            <Label>Salary(in LPA)</Label>
                             <Input
                                 type="text"
                                 name="salary"
@@ -154,9 +153,9 @@ const PostJob = () => {
                                     <SelectContent>
                                         <SelectGroup>
                                             {
-                                                companies.map((company) => {
+                                                companies.map((company,index) => {
                                                     return (
-                                                        <SelectItem value={company?.companyName?.toLowerCase()}>{company.companyName}</SelectItem>
+                                                        <SelectItem key={index}value={company?.companyName?.toLowerCase()}>{company.companyName}</SelectItem>
                                                     )
                                                 })
                                             }
