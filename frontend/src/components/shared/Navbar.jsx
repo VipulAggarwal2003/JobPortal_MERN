@@ -10,7 +10,7 @@ import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
 import logo from "../../../images/job portal logo.jpg";
-import src from "../../images/Empty_profile_pic.jpg"
+import Url from "../../images/Empty_profile_pic.jpg"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -114,7 +114,7 @@ const Navbar = ({login}) => {
                   <PopoverTrigger asChild>
                     <Avatar className="cursor-pointer">
                       <AvatarImage
-                        src={user.profile.profilePhoto ? (user.profile.profilePhoto) : ({src})}
+                        src={user.profile.profilePhoto ? (user.profile.profilePhoto) : (Url)}
                         alt="@shadcn"
                       />
                     </Avatar>
@@ -124,7 +124,7 @@ const Navbar = ({login}) => {
                       <div className="flex gap-4 space-y-2">
                         <Avatar className="cursor-pointer">
                           <AvatarImage
-                            src={user.profile.profilePhoto ? (user.profile.profilePhoto) : ({src})}
+                            src={user.profile.profilePhoto ? (user.profile.profilePhoto) : (Url)}
                             alt="@shadcn"
                           />
                         </Avatar>
