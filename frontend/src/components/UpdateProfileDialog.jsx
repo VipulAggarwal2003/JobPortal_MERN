@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dialog,DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
@@ -53,7 +53,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       toast.error("Resume must be in pdf format!")
       return;
     }
-    if(input.file?.size > 5*1024*1024){
+    if (input.file?.size > 5 * 1024 * 1024) {
       toast.error("File size must be less than 5MB!");
       return;
     }
@@ -61,11 +61,11 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       toast.error("Profile Photo must be an image!");
       return;
     }
-       if(input.profilePhoto?.size > 2*1024*1024){
+    if (input.profilePhoto?.size > 2 * 1024 * 1024) {
       toast.error("Image size must be less than 2MB!");
       return;
     }
-    
+
     if (input.file) {
       formData.append("file", input.file);
     }
@@ -105,17 +105,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         <DialogContent aria-describedby={undefined} className="sm:max-w-[470px]" onInteractOutside={() => setOpen(false)}>
           <DialogHeader>
             <DialogTitle className='text-center text-2xl text-black'>Update profile</DialogTitle>
-          
-              <button
-                className="absolute top-1 right-1 mr-1 "
-                onClick={()=>setOpen(false)}
-              >
-                <svg xmlns="#5f5d5d" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+
+            <button
+              className="absolute top-1 right-1 mr-1 "
+              onClick={() => setOpen(false)}
+            >
+              <svg xmlns="#5f5d5d" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </DialogHeader>
-          
+
           <form onSubmit={submitHandler}>
             <div className='grid gap-3 py-2'>
               <div className='grid grid-cols-4 items-center gap-4'>
@@ -185,7 +185,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   onChange={changeFileHandler}
                   className="col-span-3"
                 />
-                <br/>
+                <br />
                 <pre className='text-red-500 block mt-1 '>* max file size is 5MB (pdf only)</pre>
               </div>
 
@@ -198,8 +198,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   accept="image/*"
                   onChange={changePhotoHandler}
                   className="col-span-3 mt-1"
-                /> <br/>
-                  <pre className='text-red-500 block mt-1 '>* max image size is 2MB (jpg/png/jpeg)</pre>
+                /> <br />
+                <pre className='text-red-500 block mt-1 '>* max image size is 2MB (jpg/png/jpeg)</pre>
               </div>
             </div>
             <DialogFooter>

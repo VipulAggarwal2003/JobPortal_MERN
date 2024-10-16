@@ -52,7 +52,8 @@ const ApplicantsTable = () => {
                     {
                         applicants && applicants?.applications?.map((item) => (
                             <tr key={item._id}>
-                                <TableCell>{item?.applicant?.fullname}</TableCell>
+                                
+                                <TableCell><img className="w-16 h-16 border-black rounded-full" src={item?.applicant?.profile?.profilePhoto}></img></TableCell>
                                 <TableCell>{item?.applicant?.email}</TableCell>
                                 <TableCell>{item?.applicant?.phoneNumber}</TableCell>
                                 <TableCell>
