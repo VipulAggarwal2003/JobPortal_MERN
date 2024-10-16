@@ -7,7 +7,7 @@ import { Badge } from './ui/badge'
 import { Label } from './ui/label'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
-
+import src from "../../images/Empty_profile_pic.jpg"
 const Profile = () => {
     
     const { user } = useSelector(store => store.auth);
@@ -22,7 +22,7 @@ const Profile = () => {
                 <div className='flex justify-between'>
                     <div className='flex items-center gap-4'>
                         <Avatar className="h-24 w-24">
-                            <AvatarImage src={user?.profile?.profilePhoto != "" ? (user.profile.profilePhoto) : ("https://static.vecteezy.com/system/resources/previews/036/280/650/original/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg")} alt="profile" />
+                            <AvatarImage src={user?.profile?.profilePhoto != "" ? (user.profile.profilePhoto) : ({src})} alt="profile" />
                         </Avatar>
                         <div>
                             <h1 className='font-medium text-xl'>{user?.fullname}</h1>
