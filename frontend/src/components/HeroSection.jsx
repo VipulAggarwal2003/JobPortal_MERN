@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSearchedQuery } from '@/redux/jobSlice';
-import "../../images/job_portal_home_page.png" 
+import src from "../../images/job_portal_home_page.png" ;
 const HeroSection = () => {
   
   const [query,setQuery] = useState("");
@@ -18,7 +18,7 @@ const HeroSection = () => {
   return (
     <div >
       <div className="flex flex-col absolute z-[-10] opacity-50 w-500 h-500">
-      <img  src='../../images/job_portal_home_page.png'/>
+      <img  src={src}/>
       </div>
     <div className='text-center'>
       <div className='flex flex-col gap-5 my-10'>
