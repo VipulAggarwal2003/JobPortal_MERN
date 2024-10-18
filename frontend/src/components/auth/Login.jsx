@@ -19,7 +19,6 @@ const Login = () => {
         password: "",
         role: "",
     });
-    let login = true;
     const [passwordVisible, setPasswordVisible] = useState(false);
     
     const { loading, user } = useSelector(store => store.auth);
@@ -75,7 +74,7 @@ const Login = () => {
                     <div className='my-2 flex border border-black'>
                         <Label className=' bg-white w-10 h-10  mr-0'><img className='' src={userLogo}></img></Label>
                         <Input
-                            className="border-l-black rounded-none h-10"
+                            className="border-l-black rounded-none focus:outline-none h-10"
                             type="email"
                             value={input.email}
                             name="email"
@@ -87,7 +86,7 @@ const Login = () => {
                     <div className=' mt-1 my-2 relative flex border border-black'>
                     <Label className='bg-[#cae7f5] mr-0'><img className = 'relative bg-[#cae7f5] w-18 h-10' src={passwordLogo}></img></Label>
                         <Input
-                        className="border-l-black rounded-none"
+                        className="border-l-black  focus:outline-none  rounded-none"
                             type={passwordVisible ? "text" : "password"}
                             value={input.password}
                             name="password"

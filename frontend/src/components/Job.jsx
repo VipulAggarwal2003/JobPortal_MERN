@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
@@ -8,10 +8,12 @@ import { JOB_API_END_POINT } from '@/utils/constant';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { setSavedJobs } from '@/redux/jobSlice';
-
+import { Loader2 } from 'lucide-react';
 const Job = ({ job }) => {
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const { user } = useSelector(store => store.auth);
   const { savedJobs } = useSelector(store => store.job);
 
@@ -26,10 +28,15 @@ const Job = ({ job }) => {
     const timeDiff = currentTime - createdAt;
     return Math.floor(timeDiff / (24 * 60 * 60 * 1000));
   };
-
+ useEffect(()=>{
+   if(loading){
+     setLoading(false);
+   }
+   
+ },[savedJobs]);
   const changeHandler = async () => {
     const token = localStorage.getItem('authToken');
-
+    setLoading(true);
     if (!save) {
       // Save the job
 
@@ -53,6 +60,7 @@ const Job = ({ job }) => {
         });
         setSave(true);
         dispatch(setSavedJobs(updatedSavedJobs));
+        setLoading(false);
       } else {
         toast.error(res.data.message);
         setSave(false);
@@ -74,11 +82,13 @@ const Job = ({ job }) => {
         });
         setSave(false);
         dispatch(setSavedJobs(updatedSavedJobs));
+        setLoading(false)
       } else {
         toast.error(res.data.message);
         setSave(true);
       }
     }
+    
   };
 
   let arrayDescrip = job?.description;
@@ -121,9 +131,11 @@ const Job = ({ job }) => {
 
       <div className='flex justify-around mt-4 mb-4'>
         <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline">Details</Button>
+
         <Button className={save ? "bg-[#514e4e] hover:bg-[#9f9898]" : "bg-[#7209b7] hover:bg-[#9d1ef2]"}
                 onClick={changeHandler}>
-          {save ? (<div>Unsave</div>) : (<div>Save For Later</div>)}
+          {loading ?  (<Loader2 className='mr-2 h-4 w-4 animate-spin'/>) :      
+          (save ? (<div>Unsave</div>) : (<div>Save For Later</div>))}
         </Button>
       </div>
     </div>
