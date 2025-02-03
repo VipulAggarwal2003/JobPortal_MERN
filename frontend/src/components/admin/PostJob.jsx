@@ -16,6 +16,7 @@ const PostJob = () => {
         title: "",
         description: "",
         requirements: "",
+        responsibilities:'',
         salary: "",
         location: "",
         jobType: "",
@@ -90,6 +91,16 @@ const PostJob = () => {
                                 type="text"
                                 name="requirements"
                                 value={input.requirements}
+                                onChange={changeEventHandler}
+                                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
+                            />
+                        </div>
+                        <div>
+                            <Label>Responsibilites</Label>
+                            <Input
+                                type="text"
+                                name="responsibilities"
+                                value={input.responsibilities}
                                 onChange={changeEventHandler}
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />

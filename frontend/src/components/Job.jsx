@@ -40,7 +40,7 @@ const Job = ({ job }) => {
     if (!save) {
       // Save the job
 
-      const res = await axios.post(`${JOB_API_END_POINT}/saveJob`, { userId: user?._id, jobId: job._id }, {
+      const res = await axios.post(`${JOB_API_END_POINT}/saveJob`, { userId: user?._id, jobId: job?._id }, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `bearer ${token}`

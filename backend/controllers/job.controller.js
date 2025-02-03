@@ -2,11 +2,11 @@ import {Job} from "../models/job.model.js";
 // for admin
 export const postJob = async(req,res) =>{
     try {
-        const {title,description,requirements,salary,location,jobType,position,experience,companyId} = req.body;
+        const {title,description,requirements,responsibilities,salary,location,jobType,position,experience,companyId} = req.body;
 
         const userId = req.id;
 
-        if(!title || !description || !requirements || !salary || !location || !jobType ||
+        if(!title || !description || !requirements ||!responsibilities || !salary || !location || !jobType ||
             !position || !experience || !companyId){
             return res.status(400).json({
                 message:"something is missing",
@@ -17,6 +17,7 @@ export const postJob = async(req,res) =>{
             title,
             description,
             requirements: requirements.split(","),
+            responsibilities,
             salary : Number(salary),
             location,
             jobType,
